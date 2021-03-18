@@ -20,7 +20,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private int layoutId;
     private ArrayList<ResultsItem> movies;
 
-    //@Inject
     MovieViewModel viewModel;
 
     public MovieAdapter(@LayoutRes int layoutId, MovieViewModel viewModel) {

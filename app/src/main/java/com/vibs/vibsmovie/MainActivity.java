@@ -23,7 +23,6 @@ public class MainActivity extends BaseActivity {
 
     private KProgressHUD progressHUD;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((VibsMovieApplication) getApplicationContext()).appComponent.inject(MainActivity.this);
@@ -45,7 +44,6 @@ public class MainActivity extends BaseActivity {
 
         getAllMovie();
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -101,6 +99,9 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Make API call to get movie list from Backend
+     */
     private void getAllMovie() {
         movieViewModel.isLoadingDisplay(true);
         movieViewModel.getMovies(BuildConfig.API_KEY).observe(this, responseMovies -> {

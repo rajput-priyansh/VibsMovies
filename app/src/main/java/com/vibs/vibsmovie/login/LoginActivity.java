@@ -11,10 +11,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.vibs.vibsmovie.MainActivity;
 import com.vibs.vibsmovie.R;
 import com.vibs.vibsmovie.base.BaseActivity;
+import com.vibs.vibsmovie.databinding.ActivityLoginBinding;
+import com.vibs.vibsmovie.databinding.ActivityMainBinding;
 
 import java.util.regex.Pattern;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -28,14 +31,19 @@ public class LoginActivity extends BaseActivity {
     private TextInputLayout tiPassword;
     private TextInputEditText tietPassword;
 
-    private Button btnLogin;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ActivityLoginBinding activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
         initData();
+
+        if (savedInstanceState == null) {
+            loginViewModel.init();
+        }
+        activityBinding.setModel(loginViewModel);
 
         initUI();
 
@@ -61,7 +69,6 @@ public class LoginActivity extends BaseActivity {
         tietEmail = findViewById(R.id.tietEmail);
         tiPassword = findViewById(R.id.tiPassword);
         tietPassword = findViewById(R.id.tietPassword);
-        btnLogin = findViewById(R.id.btnLogin);
 
         tietEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,14 +104,6 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        btnLogin.setOnClickListener(view -> {
-            //Goto Main Activity
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        });
-
         updateLoginButtonUI();
     }
 
@@ -131,10 +130,20 @@ public class LoginActivity extends BaseActivity {
 
             updateLoginButtonUI();
         });
+
+        loginViewModel.isLoginClick.observe(this, aBoolean -> {
+            if (aBoolean) {
+                //Goto Main Activity
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     private void updateLoginButtonUI() {
-        btnLogin.setEnabled((loginViewModel.isValidEmail.getValue() != null ? loginViewModel.isValidEmail.getValue() : false)
+        loginViewModel.setIsLoginButtonEnable((loginViewModel.isValidEmail.getValue() != null ? loginViewModel.isValidEmail.getValue() : false)
                 && (loginViewModel.isValidPassword.getValue() != null ? loginViewModel.isValidPassword.getValue() : false));
     }
 
