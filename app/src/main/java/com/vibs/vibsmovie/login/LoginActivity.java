@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -12,7 +11,6 @@ import com.vibs.vibsmovie.MainActivity;
 import com.vibs.vibsmovie.R;
 import com.vibs.vibsmovie.base.BaseActivity;
 import com.vibs.vibsmovie.databinding.ActivityLoginBinding;
-import com.vibs.vibsmovie.databinding.ActivityMainBinding;
 
 import java.util.regex.Pattern;
 
@@ -43,7 +41,7 @@ public class LoginActivity extends BaseActivity {
         if (savedInstanceState == null) {
             loginViewModel.init();
         }
-        activityBinding.setModel(loginViewModel);
+        activityBinding.setLoginModel(loginViewModel);
 
         initUI();
 
@@ -103,8 +101,6 @@ public class LoginActivity extends BaseActivity {
                 checkValidPassword();
             }
         });
-
-        updateLoginButtonUI();
     }
 
     @Override
