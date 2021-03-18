@@ -142,11 +142,17 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Validate the login button
+     */
     private void updateLoginButtonUI() {
         loginViewModel.setIsLoginButtonEnable((loginViewModel.isValidEmail.getValue() != null ? loginViewModel.isValidEmail.getValue() : false)
                 && (loginViewModel.isValidPassword.getValue() != null ? loginViewModel.isValidPassword.getValue() : false));
     }
 
+    /**
+     * Validate the email
+     */
     private void checkValidEmail() {
         if (tietEmail.getText().toString().trim().isEmpty()) {
             loginViewModel.setIsValidEmail(false);
@@ -155,9 +161,13 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Validate the password
+     */
     private void checkValidPassword() {
         if (tietPassword.getText().toString().trim().isEmpty()) {
             loginViewModel.setIsValidPassword(false);
-        } else loginViewModel.setIsValidPassword(tietPassword.getText().toString().trim().length() >= 8 && tietPassword.getText().toString().trim().length() <= 15);
+        } else
+            loginViewModel.setIsValidPassword(tietPassword.getText().toString().trim().length() >= 8 && tietPassword.getText().toString().trim().length() <= 15);
     }
 }
