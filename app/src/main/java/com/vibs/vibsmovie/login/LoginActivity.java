@@ -36,7 +36,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ActivityLoginBinding activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        ActivityLoginBinding activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         initData();
 
