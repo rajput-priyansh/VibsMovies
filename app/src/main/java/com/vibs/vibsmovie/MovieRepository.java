@@ -4,6 +4,8 @@ package com.vibs.vibsmovie;
 import com.vibs.vibsmovie.api.ApiRepository;
 import com.vibs.vibsmovie.models.ResponseMovies;
 
+import javax.inject.Inject;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import rx.Observer;
@@ -11,10 +13,11 @@ import rx.schedulers.Schedulers;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class MovieRepository {
-    private ApiRepository apiRepository;
+    private final ApiRepository apiRepository;
 
-    MovieRepository() {
-        apiRepository = ApiRepository.getGlobalInstance(BuildConfig.API_URL);
+    @Inject
+    public MovieRepository(ApiRepository apiRepository) {
+        this.apiRepository = apiRepository;
     }
 
     public LiveData<ResponseMovies> getMovies(String apiKey) {

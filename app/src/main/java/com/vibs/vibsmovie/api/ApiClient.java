@@ -5,6 +5,8 @@ import com.vibs.vibsmovie.BuildConfig;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import dagger.Module;
+import dagger.Provides;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,12 +16,11 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Module
 public class ApiClient {
 
-    private static Retrofit retrofit = null;
-
-
-    public static Retrofit getRetroClient(String baseUrl) {
+    @Provides
+    public ApiInterface getRetroClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
 
         if(BuildConfig.DEBUG) {
@@ -44,27 +45,12 @@ public class ApiClient {
                 })
                 .build();
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
+        return new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-
-        return retrofit;
-    }
-
-    public static HttpLoggingInterceptor getHttpLoggingInterceptor() {
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        if(BuildConfig.DEBUG) {
-            httpLoggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
-        } else {
-            httpLoggingInterceptor.level(HttpLoggingInterceptor.Level.NONE);
-        }
-        return httpLoggingInterceptor;
-    }
-
-    public static ApiInterface createApiService(Retrofit retrofit) {
-        return retrofit.create(ApiInterface.class);
+                .build()
+                .create(ApiInterface.class);
     }
 }

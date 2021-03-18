@@ -1,82 +1,82 @@
 package com.vibs.vibsmovie.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.vibs.vibsmovie.BuildConfig;
-import com.vibs.vibsmovie.R;
+import com.vibs.vibsmovie.BR;
+import com.vibs.vibsmovie.MovieViewModel;
 import com.vibs.vibsmovie.models.ResultsItem;
 
 import java.util.ArrayList;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
+    private int layoutId;
     private ArrayList<ResultsItem> movies;
-    private Context context;
 
-    public MovieAdapter(ArrayList<ResultsItem> movies) {
-        this.movies = movies;
+    //@Inject
+    MovieViewModel viewModel;
+
+    public MovieAdapter(@LayoutRes int layoutId, MovieViewModel viewModel) {
+        this.layoutId = layoutId;
+        this.viewModel = viewModel;
     }
 
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        return MovieViewHolder.from(parent);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        ViewDataBinding binding = DataBindingUtil.inflate(layoutInflater, viewType, parent, false);
+
+        return new MovieViewHolder(binding);
+    }
+
+    private int getLayoutIdForPosition(int position) {
+        return layoutId;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return getLayoutIdForPosition(position);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        holder.bind(movies.get(position), context);
+        holder.bind(viewModel, position);
     }
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return movies == null ? 0 : movies.size();
+    }
+
+    public void setMovies(ArrayList<ResultsItem> movies) {
+        this.movies = movies;
+    }
+
+    public ArrayList<ResultsItem> getMovies() {
+        return movies;
     }
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvMovieName;
-        private ImageView ivMoviePhoto;
+        private final ViewDataBinding binding;
 
-        public MovieViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            tvMovieName = itemView.findViewById(R.id.tvMovieName);
-            ivMoviePhoto = itemView.findViewById(R.id.ivMoviePhoto);
+        public MovieViewHolder(ViewDataBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        public static MovieViewHolder from(ViewGroup parent) {
-            return new MovieViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_movie, parent, false));
-        }
-
-        public void bind(ResultsItem resultsItem, Context context) {
-            tvMovieName.setText(resultsItem.getTitle()!= null ? resultsItem.getTitle() : "");
-
-            String fullPath = "";
-            if (resultsItem.getPosterPath() != null && !resultsItem.getPosterPath().isEmpty()) {
-
-                fullPath = BuildConfig.POSTER_URL + resultsItem.getPosterPath();
-            } else  {
-                fullPath = "";
-            }
-
-            Glide.with(context)
-                    .load(fullPath)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .error(R.mipmap.ic_launcher)
-                    .into(ivMoviePhoto);
+        public void bind(MovieViewModel movieViewModel, int position) {
+            binding.setVariable(BR.viewModel, movieViewModel);
+            binding.setVariable(BR.position, position);
+            binding.executePendingBindings();
         }
 
     }
