@@ -9,7 +9,6 @@ import dagger.Component;
 
 @Component(modules = ApiClient.class)
 interface ApplicationComponent {
-//    void inject(LoginActivity loginActivity);
     void inject(MainActivity mainActivity);
 }
 
