@@ -36,6 +36,12 @@ android {
             buildConfigField 'String', 'POSTER_URL', '"https://image.tmdb.org/t/p/w185/"'
             signingConfig signingConfigs.vibsmovie
         }
+        debug {
+            buildConfigField "String", "API_KEY", '"47f703c0b2a4a669613b012d40d4020b"'
+            buildConfigField "String", "API_TOKEN", '"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0N2Y3MDNjMGIyYTRhNjY5NjEzYjAxMmQ0MGQ0MDIwYiIsInN1YiI6IjYwNTFmNzNhNGNhNjc2MDAzZDI4ZmI4YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.snI3ap619DqcqfksQljOnTK1iC1S1mvSr36g-oF1hmc"'
+            buildConfigField 'String', 'API_URL', '"https://api.themoviedb.org/3/movie/"'
+            buildConfigField 'String', 'POSTER_URL', '"https://image.tmdb.org/t/p/w185/"'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
